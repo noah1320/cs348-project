@@ -1,5 +1,6 @@
 import React from 'react';
-import {Routes, Route} from 'react-router-dom';
+import {Routes} from 'react-router-dom';
+import {Route} from 'react-router-dom';
 import Home from './pages/Home';
 import CreateGame from './pages/CreateGame';
 import EditGame from './pages/EditGame';

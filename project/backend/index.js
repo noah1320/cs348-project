@@ -1,10 +1,11 @@
-import express, { request } from "express";
-import { PORT, mongoDBURL } from "./config.js";
+import express  from "express";
+import  {PORT}  from "./config.js";
+import  {mongoDBURL}  from "./config.js";
 import mongoose from "mongoose";
-import { Game } from "./models/gameModel.js";
-import { User } from "./models/userModel.js";
-import { Purchase } from "./models/purchaseModel.js";
-import { Dlc } from "./models/dlcModel.js";
+import  {Game}  from "./models/gameModel.js";
+import  {User}  from "./models/userModel.js";
+import  {Purchase}  from "./models/purchaseModel.js";
+// import  Dlc  from "./models/dlcModel.js";
 
 // import gamesRoute from "./routes/gamesRoute.js";
 // import userRoute from "./routes/userRoute.js";
@@ -248,22 +249,26 @@ app.get('/transactions', async (request, response) => {
           foreignField: "game_id", 
           as: "game" 
         }
-        
-      }
-      ,
+      },
       {
         $unwind: "$game" 
       }
     ]);
 
-    const trans = await Purchase.find({}); 
+    const totalRevenue = await Purchase.aggregate([
+      {
+        $group: {
+          _id: null,
+          total: { $sum: "$price" }
+        }
+      }
+    ]);
 
-    const totalRevenue = trans.reduce((acc, trans) => acc + trans.price, 0);
-
+    console.log(totalRevenue[0].total)
     return response.status(200).json({
       count: transactions.length,
       data: transactions,
-      revenue: totalRevenue,
+      revenue: totalRevenue[0].total,
     });
   } catch (error) {
     console.error(error.message);
