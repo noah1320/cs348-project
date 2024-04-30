@@ -12,8 +12,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/mongo-sanitize": "^1.0.3",
     "cors": "^2.8.5",
     "express": "^4.19.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "mongo-sanitize": "^1.1.0",
     "mongoose": "^8.2.3",
     "nodemon": "^3.1.0"
   }

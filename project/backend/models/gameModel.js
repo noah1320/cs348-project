@@ -1,9 +1,11 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 const gameSchema = mongoose.Schema(
     {
         game_id: {
             type: Number,
+            unique: true, 
+            index: true 
         },
         title: {
             type: String,
@@ -13,11 +15,13 @@ const gameSchema = mongoose.Schema(
         },
         published_year: {
             type: Number,
-        },  
+        },
         price: {
             type: Number,
         },
     }
 );
 
-export const Game = mongoose.model('game', gameSchema);
+
+
+export const Game = mongoose.model('Game', gameSchema);

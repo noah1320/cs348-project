@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import  {Game}  from "./models/gameModel.js";
 import  {User}  from "./models/userModel.js";
 import  {Purchase}  from "./models/purchaseModel.js";
+import ExpressMongoSanitize from "express-mongo-sanitize";
 // import  Dlc  from "./models/dlcModel.js";
 
 // import gamesRoute from "./routes/gamesRoute.js";
@@ -15,12 +16,11 @@ import cors from 'cors';
 const app = express();
 
 app.use(express.json());
-
 app.use(cors());
 
 // app.use('/games', gamesRoute);
 // app.use('/user', userRoute);
-
+app.use(ExpressMongoSanitize());
 
 app.get('/', (request, response) =>{
     console.log(request);
@@ -33,6 +33,7 @@ mongoose
     .connect(mongoDBURL)
     .then(()=>{
         console.log('Connected');
+        
         app.listen(PORT, () => {
             console.log(`App is listening to ${PORT}`)
         })
@@ -52,7 +53,7 @@ app.post('/games', async (request, response) => {
         published_year: request.body.published_year,
         price: request.body.price,
       };
-  
+
       const game = await Game.create(newGame);
   
       return response.status(201).send(game);
@@ -64,8 +65,9 @@ app.post('/games', async (request, response) => {
   
 app.get('/games', async (request, response) => {
     try {
-      const games = await Game.find({});
-      // console.log(games);
+      const games = await Game.find({}).sort({ game_id: 1 });
+      // const result =  Game.createIndex({ game_id: 1 }, { unique: true });
+      // console.log(result);  
       return response.status(200).json({
         count: games.length,
         data: games,
@@ -103,6 +105,21 @@ app.put('/games/:id', async (request, response) => {
       }
   
       return response.status(200).send({ message: 'Game updated successfully' });
+    } catch (error) {
+      console.log(error.message);
+      response.status(500).send({ message: error.message });
+    }
+  });
+
+  app.get('/game', async (request, response) => {
+    try {
+      const games = await Game.find({}).sort({ price: 1 });
+      // const result =  Game.createIndex({ game_id: 1 }, { unique: true });
+      // console.log(result);  
+      return response.status(200).json({
+        count: games.length,
+        data: games,
+      });
     } catch (error) {
       console.log(error.message);
       response.status(500).send({ message: error.message });
@@ -263,8 +280,6 @@ app.get('/transactions', async (request, response) => {
         }
       }
     ]);
-
-    console.log(totalRevenue[0].total)
     return response.status(200).json({
       count: transactions.length,
       data: transactions,

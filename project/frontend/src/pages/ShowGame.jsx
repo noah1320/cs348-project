@@ -18,7 +18,6 @@ const ShowGame = () => {
     axios
       .get(`http://localhost:5555/games/${id}`)
       .then((response) => {
-        console.log(response.data)
         setGame(response.data.data);
         setCount(response.data.count)
         setLoading(false);
@@ -54,10 +53,6 @@ const ShowGame = () => {
           <div className='my-4'>
             <span className='text-xl mr-4 text-gray-500'>id</span>
             <span>{game.game_id}</span>
-          </div>
-          <div className='my-4'>
-            <span className='text-xl mr-4 text-gray-500'>Description</span>
-            <span>{game.description}</span>
           </div>
           <div className='my-4'>
             <span className='text-xl mr-4 text-gray-500'>Company</span>
