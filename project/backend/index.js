@@ -5,11 +5,8 @@ import mongoose from "mongoose";
 import  {Game}  from "./models/gameModel.js";
 import  {User}  from "./models/userModel.js";
 import  {Purchase}  from "./models/purchaseModel.js";
-import ExpressMongoSanitize from "express-mongo-sanitize";
-// import  Dlc  from "./models/dlcModel.js";
+import mongoSanitize from "express-mongo-sanitize";
 
-// import gamesRoute from "./routes/gamesRoute.js";
-// import userRoute from "./routes/userRoute.js";
 
 import cors from 'cors';
 
@@ -18,9 +15,13 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// app.use('/games', gamesRoute);
-// app.use('/user', userRoute);
-app.use(ExpressMongoSanitize());
+
+app.use(mongoSanitize());
+app.use(
+  mongoSanitize({
+    replaceWith: '_',
+  }),
+);
 
 app.get('/', (request, response) =>{
     console.log(request);

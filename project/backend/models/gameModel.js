@@ -18,6 +18,7 @@ const gameSchema = mongoose.Schema(
         },
         price: {
             type: Number,
+            index: true 
         },
     }
 );
